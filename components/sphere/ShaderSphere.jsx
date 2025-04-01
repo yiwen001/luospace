@@ -46,13 +46,16 @@ export default function Sphere() {
   // 入场动画
   useEffect(() => {
     if (meshRef.current) {
-      meshRef.current.scale.set(8, 8, 8);
+      // 设置初始状态为扁平的椭球
+      meshRef.current.scale.set(1, 0.3, 1);
+      // 动画到正常球体
       gsap.to(meshRef.current.scale, {
         x: animationConfig.hover.scaleNormal,
         y: animationConfig.hover.scaleNormal,
         z: animationConfig.hover.scaleNormal,
-        duration: 3,
-        ease: "power2.out",
+        duration: 10,
+        ease: "elastic.out(1, 0.5)",
+        // delay: 0 // 给一点延迟，让页面先加载完
       });
     }
   }, []);
