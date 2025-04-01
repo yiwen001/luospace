@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.content {
+  @apply max-w-2xl mx-auto;
+}
+
+.above {
+  @apply flex items-center justify-center gap-2 
+    text-[48px] sm:text-[60px] md:text-[90px] lg:text-[132px] 
+    h-16 sm:h-20 md:h-24 lg:h-32 
+    font-semibold uppercase;
+}
+
+.rounded-border {
+  @apply flex items-center justify-center text-center transition-colors border border-black rounded-full w-7 h-7 hover:bg-black hover:text-white;
+}
+
+.roundedBorder .hamburger-icon line {
+  stroke: var(--foreground);
+  transition: stroke 0.2s;
+}
+
+.roundedBorder:hover .hamburger-icon line {
+  stroke: var(--background);
+}
+
+.hamburger-icon line {
+  stroke: var(--foreground);
+}
+
+.hamburger-icon:hover line {
+  stroke: var(--background);
+}
+
+.will-change-transform {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
