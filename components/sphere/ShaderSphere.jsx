@@ -215,7 +215,7 @@ export default function Sphere() {
           geometryConfig.segments,
         ]}
       />
-      <sphereMaterial ref={materialRef} />
+      <sphereMaterial ref={materialRef} transparent={true} />
     </mesh>
   );
 }

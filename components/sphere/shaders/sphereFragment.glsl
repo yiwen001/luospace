@@ -13,5 +13,7 @@ void main() {
     vec3 baseColor = vec3(1.0);      // 使用配置中的基础颜色
     
     vec3 finalColor = mix(baseColor, wireframeColor, wireframe);
-    gl_FragColor = vec4(finalColor, 1.0);
+    // 只有线框部分不透明，其他部分完全透明
+    float alpha = wireframe;
+    gl_FragColor = vec4(finalColor, alpha);
 }

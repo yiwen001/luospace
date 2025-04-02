@@ -11,7 +11,7 @@ const Above = () => {
     // 延迟显示小字
     const timer = setTimeout(() => {
       setShowSmallText(true);
-    }, 2000); // 2秒后显示小字
+    }, 800); // 2秒后显示小字
 
     return () => clearTimeout(timer);
   }, []);
@@ -21,10 +21,9 @@ const Above = () => {
     animate: { 
       scale: 1,
       transition: {
-        type: "spring",
-        stiffness: 50,
-        damping: 20,
-        duration: 1
+        type: "tween",
+        ease: "easeOut",
+        duration: 0.5
       }
     }
   };
@@ -44,14 +43,16 @@ const Above = () => {
               text="f"
               animateOn="view"
               revealDirection="center"
-              speed={300}
+              speed={50}
+              maxIterations={20}
             />
             <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
             <DecryptedText 
               text="cus"
               animateOn="view"
               revealDirection="center"
-              speed={300}
+              speed={50}
+              maxIterations={20}
             />
           </motion.div>
           {showSmallText && (
@@ -60,14 +61,14 @@ const Above = () => {
                 text="I am currently engaged in AI & WEARABLES" 
                 animateOn="view"
                 revealDirection="center"
-                speed={50}
+                speed={100}
               />
               <div>
                 <DecryptedText 
                   text="collaboration is welcome"
                   animateOn="view"
                   revealDirection="center"
-                  speed={50}
+                  speed={100}
                 />
               </div>
             </div>
@@ -88,13 +89,15 @@ const Above = () => {
             animateOn="view"
             revealDirection="center"
             speed={300}
+            maxIterations={5}
           />
           <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
           <DecryptedText 
             text="re"
             animateOn="view"
             revealDirection="center"
-            speed={300}
+            speed={50}
+            maxIterations={20}
           />
         </motion.div>
         {showSmallText && (
@@ -103,7 +106,7 @@ const Above = () => {
               text="Discover more about my work"
               animateOn="view"
               revealDirection="center"
-              speed={50}
+              speed={100}
             />
           </div>
         )}
@@ -121,20 +124,23 @@ const Above = () => {
             text="break "
             animateOn="view"
             revealDirection="center"
-            speed={300}
+            speed={50}
+            maxIterations={20}
           />
           <DecryptedText 
             text="thr"
             animateOn="view"
             revealDirection="center"
-            speed={300}
+            speed={50}
+            maxIterations={20}
           />
           <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
           <DecryptedText 
             text="ugh"
             animateOn="view"
             revealDirection="center"
-            speed={300}
+            speed={50}
+            maxIterations={20}
           />
         </motion.div>
         {showSmallText && (
@@ -143,14 +149,14 @@ const Above = () => {
               text="This is a portfolio website specialize in"
               animateOn="view"
               revealDirection="center"
-              speed={50}
+              speed={100}
             />
             <div>
               <DecryptedText 
                 text="observing and exploring human behavior"
                 animateOn="view"
                 revealDirection="center"
-                speed={50}
+                speed={100}
               />
             </div>
           </div>
