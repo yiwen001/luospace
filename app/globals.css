@@ -18,6 +18,9 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 .content {
@@ -56,4 +59,105 @@ body {
   will-change: transform;
   backface-visibility: hidden;
   transform-style: preserve-3d;
+}
+
+/* 水平滚动布局 */
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+main {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  will-change: transform;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+/* 每个部分的基础样式 */
+main > * {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* 滚动条样式 */
+main::-webkit-scrollbar {
+  height: 5px;
+}
+
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 10px;
+}
+
+/* 移除其他元素的滚动条 */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 保持main的滚动条可见 */
+main {
+  -ms-overflow-style: auto;
+  scrollbar-width: thin;
+}
+
+/* 隐藏水平滚动条 */
+::-webkit-scrollbar {
+  height: 5px;
+  width: 0;
+}
+
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 10px;
+}
+
+/* 水平滚动容器 */
+.horizontal-scroll-container {
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-scroll-content {
+  display: flex;
+  height: 100%;
+  /* 防止内容被压缩 */
+  min-width: min-content;
+}
+
+/* 滚动对齐 */
+.horizontal-scroll-container section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* 隐藏滚动条但保持功能 */
+.horizontal-scroll-container {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }

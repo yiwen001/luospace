@@ -17,15 +17,7 @@ const Above = () => {
   }, []);
 
   const scaleVariants = {
-    initial: { scale: 0 },
-    animate: { 
-      scale: 1,
-      transition: {
-        type: "tween",
-        ease: "easeOut",
-        duration: 0.5
-      }
-    }
+ 
   };
 
   return (

@@ -1,65 +1,86 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useAnimation, useTransform } from "framer-motion";
 import Card from "./Card";
-
-gsap.registerPlugin(ScrollTrigger);
+import "./styles.css";
 
 const HorizontalScroll = ({ portfolio }) => {
   const containerRef = useRef(null);
   const cardsRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
+  const cylinderWidth =1800;
+  const faceCount = portfolio.length;
+  const radius =   cylinderWidth / (   Math.PI);
+  const dragFactor = 0.05;
+
+  const rotation = useMotionValue(0);
+  const controls = useAnimation();
+  const autoplayRef = useRef();
+
+  const transform = useTransform(rotation, (value) => {
+    return `rotate3d(0, 1, 0, ${value}deg)`;
+  });
+
+  const handleDrag = (_, info) => {
+    rotation.set(rotation.get() + info.offset.x * dragFactor);
+  };
+
+  const handleDragEnd = (_, info) => {
+    controls.start({
+      rotateY: rotation.get() + info.velocity.x * dragFactor,
+      transition: { type: "spring", stiffness: 60, damping: 20, mass: 0.1, ease: "easeOut" },
+    });
+  };
+
+  // 自动旋转效果
   useEffect(() => {
-    const container = containerRef.current;
-    const cards = cardsRef.current;
+    autoplayRef.current = setInterval(() => {
+      controls.start({
+        rotateY: rotation.get() - (360 / faceCount),
+        transition: { duration: 1, ease: "linear" },
+      });
+      rotation.set(rotation.get() - (360 / faceCount));
+    }, 3000);
 
-    // 计算初始位置（距离右侧1/2屏幕）
-    const startX = window.innerWidth * 1;
-
-    // 设置初始位置
-    gsap.set(cards, {
-      x: startX,
-    });
-
-    // 计算总滚动距离（考虑初始位置）
-    const totalWidth = cards.scrollWidth;
-    const scrollDistance = totalWidth - Math.abs(startX);
-
-    // 创建滚动动画
-    gsap.to(cards, {
-      x: -totalWidth,
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top top", // 从容器顶部开始
-        end: `+=${scrollDistance}`, // 减小滚动距离使动画更快
-        pin: true, // 固定容器
-        scrub: 10, // 减小数值使动画更快
-        invalidateOnRefresh: true, // 窗口大小改变时重新计算
-      },
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, []);
+    return () => clearInterval(autoplayRef.current);
+  }, [controls, faceCount, rotation]);
 
   return (
     <section
       ref={containerRef}
-      className="relative z-30 h-screen overflow-hidden"
+      className="relative z-30 h-screen w-screen overflow-hidden gallery-container"
     >
-      <div
-        ref={cardsRef}
-        className="absolute flex gap-40 -translate-y-1/2 bg-white top-1/2 will-change-transform"
-      >
-        {portfolio.map((item) => (
-          <div key={item.slug} className="flex-shrink-0 w-1/2">
-            <Card item={item} />
-          </div>
-        ))}
+           <div className="gallery-content">
+        <motion.div
+          ref={cardsRef}
+          drag="x"
+          className="gallery-track"
+          style={{
+            transform: transform,
+            rotateY: rotation,
+            width: cylinderWidth,
+            transformStyle: "preserve-3d",
+          }}
+          onDrag={handleDrag}
+          onDragEnd={handleDragEnd}
+          animate={controls}
+        >
+          {portfolio.map((item, i) => (
+            <div
+              key={item.slug}
+              className="gallery-item"
+              style={{
+                transform: `rotateY(${i * (360 / faceCount)}deg) translateZ(${radius}px)`,
+              }}
+            >
+              <div className="w-[200px] transition-transform duration-300 hover:scale-105">
+                <Card item={item} />
+              </div>
+            </div>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

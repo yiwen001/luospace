@@ -1,0 +1,47 @@
+.gallery-container {
+   
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gallery-gradient {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 48px;
+  z-index: 10;
+}
+
+ 
+.gallery-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.gallery-track {
+  display: flex;
+  height: auto;
+  min-height: 200px;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  transform-style: preserve-3d;
+  width: 100%;
+}
+
+.gallery-item {
+  position: absolute;
+  display: flex;
+  height: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 50%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
