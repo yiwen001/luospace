@@ -8,16 +8,21 @@ const Above = () => {
   const [showSmallText, setShowSmallText] = useState(false);
 
   useEffect(() => {
-    // 延迟显示小字
     const timer = setTimeout(() => {
       setShowSmallText(true);
-    }, 800); // 2秒后显示小字
+    }, 800);
 
     return () => clearTimeout(timer);
   }, []);
 
   const scaleVariants = {
- 
+    initial: { opacity: 0 },
+    animate: { 
+      opacity: 1,
+      transition: {
+        duration: 0.3
+      }
+    }
   };
 
   return (
@@ -33,38 +38,30 @@ const Above = () => {
           >
             <DecryptedText 
               text="f"
-              animateOn="view"
-              revealDirection="center"
-              speed={50}
-              maxIterations={20}
+              speed={100}
+              maxIterations={5}
             />
             <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
             <DecryptedText 
               text="cus"
-              animateOn="view"
-              revealDirection="center"
-              speed={50}
-              maxIterations={20}
+              speed={100}
+              maxIterations={5}
             />
           </motion.div>
-          {showSmallText && (
-            <div className="pl-1 text-xs leading-tight sm:pl-2 sm:text-sm md:text-base lg:text-lg">
+          <div className={`pl-1 text-xs leading-tight sm:pl-2 sm:text-sm md:text-base lg:text-lg transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
+            <DecryptedText 
+              text="I am currently engaged in AI & WEARABLES"
+              speed={50}
+              maxIterations={8}
+            />
+            <div>
               <DecryptedText 
-                text="I am currently engaged in AI & WEARABLES" 
-                animateOn="view"
-                revealDirection="center"
-                speed={100}
+                text="collaboration is welcome"
+                speed={50}
+                maxIterations={8}
               />
-              <div>
-                <DecryptedText 
-                  text="collaboration is welcome"
-                  animateOn="view"
-                  revealDirection="center"
-                  speed={100}
-                />
-              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -78,81 +75,68 @@ const Above = () => {
         >
           <DecryptedText 
             text="expl"
-            animateOn="view"
-            revealDirection="center"
-            speed={300}
+            speed={100}
             maxIterations={5}
           />
           <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
           <DecryptedText 
             text="re"
-            animateOn="view"
-            revealDirection="center"
-            speed={50}
-            maxIterations={20}
+            speed={100}
+            maxIterations={5}
           />
         </motion.div>
-        {showSmallText && (
-          <div className="mt-2 text-xs leading-tight sm:text-sm md:text-base lg:text-lg">
-            <DecryptedText 
-              text="Discover more about my work"
-              animateOn="view"
-              revealDirection="center"
-              speed={100}
-            />
-          </div>
-        )}
+        <div className={`mt-2 text-xs leading-tight sm:text-sm md:text-base lg:text-lg transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
+          <DecryptedText 
+            text="Discover more about my work"
+            speed={50}
+            maxIterations={8}
+          />
+        </div>
       </div>
 
       {/* break through */}
       <div className="absolute -translate-x-1/2 left-1/2 bottom-12 sm:bottom-16 md:bottom-20 lg:bottom-24">
-        <motion.div 
-          className="above whitespace-nowrap"
-          initial="initial"
-          animate="animate"
-          variants={scaleVariants}
-        >
-          <DecryptedText 
-            text="break "
-            animateOn="view"
-            revealDirection="center"
-            speed={50}
-            maxIterations={20}
-          />
-          <DecryptedText 
-            text="thr"
-            animateOn="view"
-            revealDirection="center"
-            speed={50}
-            maxIterations={20}
-          />
-          <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
-          <DecryptedText 
-            text="ugh"
-            animateOn="view"
-            revealDirection="center"
-            speed={50}
-            maxIterations={20}
-          />
-        </motion.div>
-        {showSmallText && (
-          <div className="pr-1 text-xs leading-tight sm:pr-2 sm:text-sm md:text-base lg:text-lg text-end">
+        <div className="flex flex-col items-center gap-4">
+          <motion.div 
+            className="above whitespace-nowrap"
+            initial="initial"
+            animate="animate"
+            variants={scaleVariants}
+          >
             <DecryptedText 
-              text="This is a portfolio website specialize in"
-              animateOn="view"
-              revealDirection="center"
+              text="break "
               speed={100}
+              maxIterations={5}
             />
-            <div>
+            <DecryptedText 
+              text="thr"
+              speed={100}
+              maxIterations={5}
+            />
+            <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
+            <DecryptedText 
+              text="ugh"
+              speed={100}
+              maxIterations={5}
+            />
+          </motion.div>
+          <div className={`w-full text-end transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
+            <div className="pr-1 text-xs leading-tight sm:pr-2 sm:text-sm md:text-base lg:text-lg">
               <DecryptedText 
-                text="observing and exploring human behavior"
-                animateOn="view"
-                revealDirection="center"
-                speed={100}
+                text="This is a portfolio website specialize in"
+                speed={50}
+                maxIterations={8}
               />
+              <div>
+                <DecryptedText 
+                  text="observing and exploring human behavior"
+                  speed={50}
+                  maxIterations={8}
+                />
+              </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
