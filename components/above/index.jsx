@@ -37,16 +37,21 @@ const Above = () => {
             variants={scaleVariants}
           >
             <DecryptedText 
-              text="f"
+              text="focus"
+              speed={70}
+              maxIterations={20}
+            />
+              {/* <DecryptedText 
+              text="o"
               speed={100}
               maxIterations={5}
-            />
-            <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
-            <DecryptedText 
+            /> */}
+            {/* <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" /> */}
+            {/* <DecryptedText 
               text="cus"
               speed={100}
               maxIterations={5}
-            />
+            /> */}
           </motion.div>
           <div className={`pl-1 text-xs leading-tight sm:pl-2 sm:text-sm md:text-base lg:text-lg transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
             <DecryptedText 
@@ -74,16 +79,16 @@ const Above = () => {
           variants={scaleVariants}
         >
           <DecryptedText 
-            text="expl"
-            speed={100}
-            maxIterations={5}
+            text="explore"
+            speed={70}
+            maxIterations={20}
           />
-          <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
-          <DecryptedText 
+          {/* <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" /> */}
+          {/* <DecryptedText 
             text="re"
             speed={100}
             maxIterations={5}
-          />
+          /> */}
         </motion.div>
         <div className={`mt-2 text-xs leading-tight sm:text-sm md:text-base lg:text-lg transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
           <DecryptedText 
@@ -104,21 +109,21 @@ const Above = () => {
             variants={scaleVariants}
           >
             <DecryptedText 
-              text="break "
+              text="breakthrough "
+              speed={70}
+              maxIterations={20}
+            />
+            {/* <DecryptedText 
+              text="through"
               speed={100}
               maxIterations={5}
-            />
-            <DecryptedText 
-              text="thr"
-              speed={100}
-              maxIterations={5}
-            />
-            <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
+            /> */}
+            {/* <O className="w-[80px] h-[48px] sm:w-[140px] sm:h-[80px] md:w-[180px] md:h-[100px] lg:w-[212px] lg:h-[120px]" />
             <DecryptedText 
               text="ugh"
               speed={100}
               maxIterations={5}
-            />
+            /> */}
           </motion.div>
           <div className={`w-full text-end transition-opacity duration-300 ${showSmallText ? 'opacity-100' : 'opacity-0'}`}>
             <div className="pr-1 text-xs leading-tight sm:pr-2 sm:text-sm md:text-base lg:text-lg">
