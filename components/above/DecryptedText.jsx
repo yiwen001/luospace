@@ -34,6 +34,7 @@ const styles = {
  * - parentClassName?: string    (applied to parent span)
  * - encryptedClassName?: string (applied to encrypted letters)
  * - animateOn?: "view" | "hover"  (default: "hover")
+ * - onAnimationComplete?: () => void (called when animation completes)
  */
 export default function DecryptedText({
   text,
@@ -47,6 +48,7 @@ export default function DecryptedText({
   parentClassName = '',
   encryptedClassName = '',
   animateOn = 'view', // Changed default to view
+  onAnimationComplete,
   ...props
 }) {
   const [displayText, setDisplayText] = useState('')
@@ -98,6 +100,9 @@ export default function DecryptedText({
             clearInterval(interval)
             setIsScrambling(false)
             setDisplayText(text)
+            if (onAnimationComplete) {
+              onAnimationComplete()
+            }
             return prevRevealed
           }
         })
@@ -111,7 +116,7 @@ export default function DecryptedText({
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isHovering, text, speed])
+  }, [isHovering, text, speed, onAnimationComplete])
 
   useEffect(() => {
     if (animateOn !== 'view') return
