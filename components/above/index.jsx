@@ -59,7 +59,7 @@ const Above = () => {
                   <motion.span
                     className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
                     initial={{ scaleY: 1, opacity: 1 }}
-                    animate={startOAnimation ? { scaleY: 0.4, opacity: 0 } : { scaleY: 1, opacity: 1 }}
+                    animate={startOAnimation ? { scaleX: 2, scaleY: 0.5, opacity: 0 } : { scaleY: 1 , opacity: 1 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     style={{ transformOrigin: "center" }}
                   >
@@ -126,7 +126,7 @@ const Above = () => {
                 <motion.span
                   className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
                   initial={{ scaleY: 1, opacity: 1 }}
-                  animate={startExploreOAnimation ? { scaleY: 0.4, opacity: 0 } : { scaleY: 1, opacity: 1 }}
+                  animate={startExploreOAnimation ? { scaleX: 2, scaleY: 0.5, opacity: 0  } : { scaleY: 1, opacity: 1 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   style={{ transformOrigin: "center" }}
                 >
@@ -186,7 +186,7 @@ const Above = () => {
                   <motion.span
                     className="absolute inset-0 flex items-center justify-center text-4xl sm:text-6xl md:text-7xl lg:text-8xl"
                     initial={{ scaleY: 1, opacity: 1 }}
-                    animate={startBreakthroughOAnimation ? { scaleY: 0.4, opacity: 0 } : { scaleY: 1, opacity: 1 }}
+                    animate={startBreakthroughOAnimation ? { scaleX: 2, scaleY: 0.5, opacity: 0 } : { scaleY: 1, opacity: 1 }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                     style={{ transformOrigin: "center" }}
                   >
