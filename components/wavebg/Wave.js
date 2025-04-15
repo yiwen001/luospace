@@ -61,7 +61,7 @@ class Noise {
 }
 
 const Waves = ({
-  lineColor = "black",
+  lineColor = "rgba(150, 150, 150, 0.5)", // 浅灰色线条
   backgroundColor = "transparent",
   waveSpeedX = 0.0125,
   waveSpeedY = 0.005,

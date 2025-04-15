@@ -49,15 +49,24 @@ export default function ClientPage({ portfolio, about }) {
       </div>
 
       <div className="relative w-screen h-screen" ref={aboutSectionRef}>
-        <div className="absolute inset-0 z-[5]">
-          {showWaves && <Waves style={{ pointerEvents: 'auto', zIndex: 5 }} />}
-        </div>
+      
         <div className="relative z-[10]">
           <ul>
             {about.map((item, index) => {
               return <About key={index} item={item} />;
             })}
           </ul>
+        </div>
+        <div className="absolute inset-0 z-[5]">
+          {showWaves && <Waves  waveSpeedX={0.02}
+  waveSpeedY={0.01}
+  waveAmpX={40}
+  waveAmpY={20}
+  friction={0.9}
+  tension={0.01}
+  maxCursorMove={120}
+  xGap={12}
+  yGap={36} style={{ pointerEvents: 'auto', zIndex: 5 }} />}
         </div>
       </div>
       
