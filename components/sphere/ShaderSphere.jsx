@@ -61,64 +61,64 @@ export default function Sphere() {
   }, []);
 
   // 添加滚动监听
-  useEffect(() => {
-    const handleScroll = () => {
-      if (meshRef.current) {
-        const viewportHeight = window.innerHeight;
-        const currentScroll = window.scrollY;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (meshRef.current) {
+  //       const viewportHeight = window.innerHeight;
+  //       const currentScroll = window.scrollY;
 
-        // 计算当前在第几屏
-        const currentScreen = Math.floor(currentScroll / viewportHeight);
+  //       // 计算当前在第几屏
+  //       const currentScreen = Math.floor(currentScroll / viewportHeight);
 
-        if (currentScroll > viewportHeight) {
-          let targetScale = 1.0;
+  //       if (currentScroll > viewportHeight) {
+  //         let targetScale = 1.0;
 
-          if (currentScreen < 4) {
-            // 在第2-3屏逐渐缩小到0.2
-            const scrollPercent =
-              ((currentScroll - viewportHeight) / (2 * viewportHeight)) * 5;
-            targetScale = gsap.utils.interpolate(
-              1.0,
-              0.2,
-              Math.min(1, scrollPercent)
-            );
-          } else {
-            // 在第4屏开始逐渐变大到1.5
-            const scrollPercent =
-              (currentScroll - 4 * viewportHeight) / viewportHeight;
-            targetScale = gsap.utils.interpolate(
-              0.2,
-              1.5,
-              Math.min(1, scrollPercent)
-            );
-          }
+  //         if (currentScreen < 4) {
+  //           // 在第2-3屏逐渐缩小到0.2
+  //           const scrollPercent =
+  //             ((currentScroll - viewportHeight) / (2 * viewportHeight)) * 5;
+  //           targetScale = gsap.utils.interpolate(
+  //             1.0,
+  //             0.2,
+  //             Math.min(1, scrollPercent)
+  //           );
+  //         } else {
+  //           // 在第4屏开始逐渐变大到1.5
+  //           const scrollPercent =
+  //             (currentScroll - 4 * viewportHeight) / viewportHeight;
+  //           targetScale = gsap.utils.interpolate(
+  //             0.2,
+  //             1.5,
+  //             Math.min(1, scrollPercent)
+  //           );
+  //         }
 
-          transitionRef.current.scrollScale = targetScale;
+  //         transitionRef.current.scrollScale = targetScale;
 
-          gsap.to(meshRef.current.scale, {
-            x: targetScale,
-            y: targetScale,
-            z: targetScale,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        } else {
-          // 在第一屏保持原始大小
-          transitionRef.current.scrollScale = 1.0;
-          gsap.to(meshRef.current.scale, {
-            x: 1,
-            y: 1,
-            z: 1,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        }
-      }
-    };
+  //         gsap.to(meshRef.current.scale, {
+  //           x: targetScale,
+  //           y: targetScale,
+  //           z: targetScale,
+  //           duration: 0.5,
+  //           ease: "power2.out",
+  //         });
+  //       } else {
+  //         // 在第一屏保持原始大小
+  //         transitionRef.current.scrollScale = 1.0;
+  //         gsap.to(meshRef.current.scale, {
+  //           x: 1,
+  //           y: 1,
+  //           z: 1,
+  //           duration: 0.5,
+  //           ease: "power2.out",
+  //         });
+  //       }
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   // 每帧更新
   useFrame((state) => {
