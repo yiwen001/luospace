@@ -2,6 +2,11 @@ import { getImageInfo } from "@/lib/sanity/utils";
 import Image from "next/image";
 
 const Contributors = ({ contributors }) => {
+  // Return early if contributors is null or undefined
+  if (!contributors || contributors.length === 0) {
+    return null;
+  }
+  
   return (
     <section>
       <ul className="flex gap-12 mt-24">

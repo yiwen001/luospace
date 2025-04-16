@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useAnimation, useTransform } from "framer-motion";
+import Image from "next/image";
+import { getImageInfo } from "@/lib/sanity/utils";
+import Link from "next/link";
 import Card from "./Card";
 import "./styles.css";
 
@@ -10,9 +13,9 @@ const HorizontalScroll = ({ portfolio }) => {
   const cardsRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const cylinderWidth =1800;
+  const cylinderWidth = 1200; // Reduced width for smaller images
   const faceCount = portfolio.length;
-  const radius =   cylinderWidth / (   Math.PI);
+  const radius = cylinderWidth / (Math.PI);
   const dragFactor = 0.05;
 
   const rotation = useMotionValue(0);
@@ -34,6 +37,22 @@ const HorizontalScroll = ({ portfolio }) => {
     });
   };
 
+  // Calculate current index based on rotation
+  useEffect(() => {
+    const calculateCurrentIndex = () => {
+      // Convert rotation to positive value between 0-360
+      const currentRotation = ((rotation.get() % 360) + 360) % 360;
+      // Calculate which item is at the front based on rotation
+      const itemAngle = 360 / faceCount;
+      const index = Math.round(currentRotation / itemAngle) % faceCount;
+      setCurrentIndex(index);
+    };
+
+    // Subscribe to rotation changes
+    const unsubscribe = rotation.onChange(calculateCurrentIndex);
+    return unsubscribe;
+  }, [rotation, faceCount]);
+
   // 自动旋转效果
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
@@ -52,7 +71,8 @@ const HorizontalScroll = ({ portfolio }) => {
       ref={containerRef}
       className="relative z-30 h-screen w-screen overflow-hidden gallery-container"
     >
-           <div className="gallery-content">
+      <div className="gallery-content">
+        {/* 3D Rotating Images */}
         <motion.div
           ref={cardsRef}
           drag="x"
@@ -75,12 +95,40 @@ const HorizontalScroll = ({ portfolio }) => {
                 transform: `rotateY(${i * (360 / faceCount)}deg) translateZ(${radius}px)`,
               }}
             >
-              <div className="w-[200px] transition-transform duration-300 hover:scale-105">
-                <Card item={item} />
+              <div className="image-container transition-transform duration-300 hover:scale-105">
+                {/* Only show the image part of the card */}
+                <div className="image-only">
+                  {item.cover && (
+                    <div className="relative w-full h-full">
+                      <Image 
+                        src={getImageInfo(item.cover).imgUrl}
+                        alt={item.title}
+                        fill
+                        className="gallery-image"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
         </motion.div>
+        
+        {/* Text Description (only shown for current item) */}
+        <div className="description-container">
+          {portfolio.map((item, i) => (
+            <div 
+              key={`desc-${item.slug}`}
+              className={`item-description ${i === currentIndex ? 'active' : ''}`}
+            >
+              <h2 className="item-title">{item.title}</h2>
+              <p className="item-text">{item.description ? item.description : 'View this project for more details'}</p>
+              <Link href={`/portfolio/${item.slug}`} className="view-more-btn">
+                View Project
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
