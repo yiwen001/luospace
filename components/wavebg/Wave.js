@@ -67,8 +67,8 @@ const Waves = ({
   waveSpeedY = 0.005,
   waveAmpX = 32,
   waveAmpY = 16,
-  xGap = 10,
-  yGap = 32,
+  xGap = 6,
+  yGap = 24,
   friction = 0.925,
   tension = 0.005,
   maxCursorMove = 100,
@@ -134,10 +134,20 @@ const Waves = ({
       const { waveSpeedX, waveSpeedY, waveAmpX, waveAmpY, friction, tension, maxCursorMove } = configRef.current;
       lines.forEach((pts) => {
         pts.forEach((p) => {
-          const move = noise.perlin2(
+          // Use multiple noise samples at different frequencies for more natural movement
+          const move1 = noise.perlin2(
             (p.x + time * waveSpeedX) * 0.002,
             (p.y + time * waveSpeedY) * 0.0015
-          ) * 12;
+          ) * 10;
+          
+          const move2 = noise.perlin2(
+            (p.x + time * waveSpeedX * 1.5) * 0.004,
+            (p.y + time * waveSpeedY * 1.5) * 0.003
+          ) * 4;
+          
+          // Combine noise samples for more complex, natural movement
+          const move = move1 + move2;
+          
           p.wave.x = Math.cos(move) * waveAmpX;
           p.wave.y = Math.sin(move) * waveAmpY;
 
@@ -172,20 +182,50 @@ const Waves = ({
       const { width, height } = boundingRef.current;
       const ctx = ctxRef.current;
       ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
+      
+      // Set line properties for smoother appearance
+      ctx.lineWidth = 1;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.strokeStyle = configRef.current.lineColor;
+      
       linesRef.current.forEach((points) => {
-        let p1 = moved(points[0], false);
-        ctx.moveTo(p1.x, p1.y);
-        points.forEach((p, idx) => {
-          const isLast = idx === points.length - 1;
-          p1 = moved(p, !isLast);
-          const p2 = moved(points[idx + 1] || points[points.length - 1], !isLast);
-          ctx.lineTo(p1.x, p1.y);
-          if (isLast) ctx.moveTo(p2.x, p2.y);
+        if (points.length < 2) return;
+        
+        // Draw using cardinal spline interpolation for smoother curves
+        const movedPoints = points.map((p, i) => {
+          // Last point doesn't need cursor effect
+          const isLast = i === points.length - 1;
+          return moved(p, !isLast);
         });
+        
+        // Start the path
+        ctx.beginPath();
+        ctx.moveTo(movedPoints[0].x, movedPoints[0].y);
+        
+        // Use cardinal spline interpolation
+        // This creates a smooth curve through all points
+        const tension = 0.5; // Higher = more curved (0-1)
+        
+        for (let i = 0; i < movedPoints.length - 1; i++) {
+          // Get current point and next point
+          const p0 = i > 0 ? movedPoints[i - 1] : movedPoints[i];
+          const p1 = movedPoints[i];
+          const p2 = movedPoints[i + 1];
+          const p3 = i < movedPoints.length - 2 ? movedPoints[i + 2] : p2;
+          
+          // Calculate control points for the curve
+          const cp1x = p1.x + (p2.x - p0.x) * tension / 3;
+          const cp1y = p1.y + (p2.y - p0.y) * tension / 3;
+          const cp2x = p2.x - (p3.x - p1.x) * tension / 3;
+          const cp2y = p2.y - (p3.y - p1.y) * tension / 3;
+          
+          // Draw the curve segment
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+        
+        ctx.stroke();
       });
-      ctx.stroke();
     }
 
     function tick(t) {
