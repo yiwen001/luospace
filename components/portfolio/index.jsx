@@ -13,9 +13,9 @@ const HorizontalScroll = ({ portfolio }) => {
   const cardsRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const cylinderWidth = 1200; // Reduced width for smaller images
+  const cylinderWidth = 4000; // Reduced width for smaller images
   const faceCount = portfolio.length;
-  const radius = cylinderWidth / (Math.PI);
+  const radius = cylinderWidth / ( 2* Math.PI);
   const dragFactor = 0.05;
 
   const rotation = useMotionValue(0);
@@ -55,16 +55,34 @@ const HorizontalScroll = ({ portfolio }) => {
 
   // 自动旋转效果
   useEffect(() => {
-    autoplayRef.current = setInterval(() => {
-      controls.start({
-        rotateY: rotation.get() - (360 / faceCount),
-        transition: { duration: 1, ease: "linear" },
-      });
-      rotation.set(rotation.get() - (360 / faceCount));
-    }, 3000);
+    let animationFrameId;
+    let startTime = null;
+    let currentRotation = rotation.get();
+    const rotationSpeed = 6; // degrees per second
 
-    return () => clearInterval(autoplayRef.current);
-  }, [controls, faceCount, rotation]);
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      
+      // Calculate continuous rotation based on time
+      currentRotation = -(elapsed * rotationSpeed / 1000);
+      
+      // Update rotation
+      rotation.set(currentRotation);
+      controls.set({ rotateY: currentRotation });
+      
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    // Start animation
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [controls, rotation]);
 
   return (
     <section
@@ -93,11 +111,13 @@ const HorizontalScroll = ({ portfolio }) => {
               className="gallery-item"
               style={{
                 transform: `rotateY(${i * (360 / faceCount)}deg) translateZ(${radius}px)`,
+                width: '600px',
+                height: '240px'
               }}
             >
               <div className="image-container transition-transform duration-300 hover:scale-105">
                 {/* Only show the image part of the card */}
-                <div className="image-only">
+                <div className="image-only" style={{ width: '100%', height: '100%' }}>
                   {item.cover && (
                     <div className="relative w-full h-full">
                       <Image 
@@ -105,6 +125,7 @@ const HorizontalScroll = ({ portfolio }) => {
                         alt={item.title}
                         fill
                         className="gallery-image"
+                        style={{ borderRadius: 0, objectFit: 'cover' }}
                       />
                     </div>
                   )}
