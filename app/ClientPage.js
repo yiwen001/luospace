@@ -9,6 +9,30 @@ import Waves from "@/components/wavebg/Wave";
 export default function ClientPage({ portfolio, about }) {
   const [showWaves, setShowWaves] = useState(false);
   const aboutSectionRef = useRef(null);
+  const mainRef = useRef(null);
+  const [currentSection, setCurrentSection] = useState(0);
+
+  const scrollToSection = (index) => {
+    const sections = mainRef.current?.children;
+    if (sections && sections[index]) {
+      sections[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
+      setCurrentSection(index);
+    }
+  };
+
+  useEffect(() => {
+    const handleWheel = (e) => {
+      e.preventDefault();
+      if (e.deltaY > 0 && currentSection < 2) {
+        scrollToSection(currentSection + 1);
+      } else if (e.deltaY < 0 && currentSection > 0) {
+        scrollToSection(currentSection - 1);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [currentSection]);
 
   useEffect(() => {
     if (!aboutSectionRef.current) return;
@@ -35,20 +59,20 @@ export default function ClientPage({ portfolio, about }) {
   }, []);
 
   return (
-    <main>
+    <main ref={mainRef} className="flex snap-x snap-mandatory">
       
-      <div className="relative w-screen h-screen">
+      <div className="relative w-screen h-screen flex-none snap-start">
         <div className="fixed inset-0">
         <Above />  
         </div>
        <Experience />
       </div>
 
-      <div className="relative w-screen h-screen">
+      <div className="relative w-screen h-screen flex-none snap-start">
         <HorizontalScroll portfolio={portfolio} />
       </div>
 
-      <div className="relative w-screen h-screen" ref={aboutSectionRef}>
+      <div className="relative w-screen h-screen flex-none snap-start" ref={aboutSectionRef}>
       
         <div className="relative z-[10]">
           <ul>
