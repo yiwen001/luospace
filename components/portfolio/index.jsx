@@ -5,7 +5,7 @@ import { motion, useMotionValue, useAnimation, useTransform } from "framer-motio
 import Image from "next/image";
 import { getImageInfo } from "@/lib/sanity/utils";
 import Link from "next/link";
-import Card from "./Card";
+import DecryptedText from "./DecryptedText";
 import "./styles.css";
 
 const HorizontalScroll = ({ portfolio }) => {
@@ -153,10 +153,42 @@ const HorizontalScroll = ({ portfolio }) => {
                  opacity: i === currentIndex ? 1 : 0
               }}
             >
-              <h2 className="item-title">{item.title}</h2>
-              <p className="item-text">{item.description ? item.description : 'View this project for more details'}</p>
+              <h2 className="item-title">
+                <DecryptedText 
+                  text={item.title}
+                  speed={60}
+                  maxIterations={20}
+                  animateOn="view"
+                  key={`title-${item.slug}-${i === currentIndex}`}
+                />
+              </h2>
+              <p className="item-text">
+                {item.description ? (
+                  <DecryptedText 
+                    text={item.description}
+                    speed={60}
+                    maxIterations={20}
+                    animateOn="view"
+                    key={`desc-${item.slug}-${i === currentIndex}`}
+                  />
+                ) : (
+                  <DecryptedText 
+                    text="View this project for more details"
+                    speed={60}
+                    maxIterations={20}
+                    animateOn="view"
+                    key={`default-${item.slug}-${i === currentIndex}`}
+                  />
+                )}
+              </p>
               <Link href={`/portfolio/${item.slug}`} className="view-more-btn">
-                View Project
+                <DecryptedText 
+                  text="View Project"
+                  speed={60}
+                  maxIterations={20}
+                  animateOn="view"
+                  key={`btn-${item.slug}-${i === currentIndex}`}
+                />
               </Link>
             </div>
           ))}
