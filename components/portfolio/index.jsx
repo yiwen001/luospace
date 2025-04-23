@@ -12,6 +12,7 @@ const HorizontalScroll = ({ portfolio }) => {
   const containerRef = useRef(null);
   const cardsRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [descriptionOpacity, setDescriptionOpacity] = useState(1);
 
   const cylinderWidth = 4000; // Reduced width for smaller images
   const faceCount = portfolio.length;
@@ -45,7 +46,14 @@ const HorizontalScroll = ({ portfolio }) => {
       // Calculate which item is at the front based on rotation
       const itemAngle = 360 / faceCount;
       const index = Math.round(currentRotation / itemAngle) % faceCount;
+      
+      // Calculate opacity based on how centered the current item is
+      const angleFromCenter = Math.abs(currentRotation - (index * itemAngle));
+      const maxAngle = itemAngle / 2; // Half the angle between items
+      const opacity = Math.max(0, 1 - (angleFromCenter / maxAngle));
+      
       setCurrentIndex(index);
+      setDescriptionOpacity(opacity);
     };
 
     // Subscribe to rotation changes
@@ -140,7 +148,12 @@ const HorizontalScroll = ({ portfolio }) => {
           {portfolio.map((item, i) => (
             <div 
               key={`desc-${item.slug}`}
-              className={`item-description ${i === currentIndex ? 'active' : ''}`}
+              className="item-description"
+              style={{
+                opacity: i === currentIndex ? descriptionOpacity : 0,
+                transform: `translateY(${20 * (1 - descriptionOpacity)}px)`,
+                transition: 'opacity 0.3s ease, transform 0.3s ease'
+              }}
             >
               <h2 className="item-title">{item.title}</h2>
               <p className="item-text">{item.description ? item.description : 'View this project for more details'}</p>
