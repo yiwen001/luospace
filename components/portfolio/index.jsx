@@ -150,9 +150,7 @@ const HorizontalScroll = ({ portfolio }) => {
               key={`desc-${item.slug}`}
               className="item-description"
               style={{
-                opacity: i === currentIndex ? descriptionOpacity : 0,
-                transform: `translateY(${20 * (1 - descriptionOpacity)}px)`,
-                transition: 'opacity 0.3s ease, transform 0.3s ease'
+                 opacity: i === currentIndex ? 1 : 0
               }}
             >
               <h2 className="item-title">{item.title}</h2>
@@ -169,3 +167,5 @@ const HorizontalScroll = ({ portfolio }) => {
 };
 
 export default HorizontalScroll;
+
+  
