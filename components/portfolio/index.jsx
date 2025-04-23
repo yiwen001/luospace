@@ -14,10 +14,10 @@ const HorizontalScroll = ({ portfolio }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [descriptionOpacity, setDescriptionOpacity] = useState(1);
 
-  const cylinderWidth = 4000; // Reduced width for smaller images
+  // Adjust dimensions for better 3D ring effect
   const faceCount = portfolio.length;
-  const radius = cylinderWidth / ( 2* Math.PI);
-  const dragFactor = 0.05;
+  const radius = 800; // Fixed radius for better control
+  const dragFactor = 0.1; // Increased for more responsive dragging
 
   const rotation = useMotionValue(0);
   const controls = useAnimation();
@@ -61,12 +61,12 @@ const HorizontalScroll = ({ portfolio }) => {
     return unsubscribe;
   }, [rotation, faceCount]);
 
-  // 自动旋转效果
+  // 自动旋转效果 - Continuous rotation with visible back side
   useEffect(() => {
     let animationFrameId;
     let startTime = null;
     let currentRotation = rotation.get();
-    const rotationSpeed = 6; // degrees per second
+    const rotationSpeed = 8; // Slightly faster rotation
 
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
@@ -85,9 +85,27 @@ const HorizontalScroll = ({ portfolio }) => {
     // Start animation
     animationFrameId = requestAnimationFrame(animate);
 
+    // Pause animation on user interaction
+    const handleUserInteraction = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    };
+
+    const trackElement = cardsRef.current;
+    if (trackElement) {
+      trackElement.addEventListener('mousedown', handleUserInteraction);
+      trackElement.addEventListener('touchstart', handleUserInteraction);
+    }
+
     return () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
+      }
+      if (trackElement) {
+        trackElement.removeEventListener('mousedown', handleUserInteraction);
+        trackElement.removeEventListener('touchstart', handleUserInteraction);
       }
     };
   }, [controls, rotation]);
@@ -106,7 +124,6 @@ const HorizontalScroll = ({ portfolio }) => {
           style={{
             transform: transform,
             rotateY: rotation,
-            width: cylinderWidth,
             transformStyle: "preserve-3d",
           }}
           onDrag={handleDrag}
@@ -119,21 +136,22 @@ const HorizontalScroll = ({ portfolio }) => {
               className="gallery-item"
               style={{
                 transform: `rotateY(${i * (360 / faceCount)}deg) translateZ(${radius}px)`,
-                width: '600px',
-                height: '240px'
+                width: '500px',
+                height: '240px',
+                opacity: 1 // Always visible
               }}
             >
               <div className="image-container transition-transform duration-300 hover:scale-105">
                 {/* Only show the image part of the card */}
-                <div className="image-only" style={{ width: '100%', height: '100%' }}>
+                <div className="image-only" style={{ width: '100%', height: '100%', position: 'relative' }}>
                   {item.cover && (
-                    <div className="relative w-full h-full">
+                    <div className="relative w-full h-full film-frame">
                       <Image 
                         src={getImageInfo(item.cover).imgUrl}
                         alt={item.title}
                         fill
                         className="gallery-image"
-                        style={{ borderRadius: 0, objectFit: 'cover' }}
+                        style={{ borderRadius: 0, objectFit: 'cover', opacity: 0.9 }} // Slightly transparent for better 3D effect
                       />
                     </div>
                   )}

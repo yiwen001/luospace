@@ -24,6 +24,7 @@
   perspective: 3000px;
   transform-style: preserve-3d;
   padding: 0 20px;
+  position: relative;
 }
 
 .gallery-track {
@@ -36,8 +37,8 @@
   transform-style: preserve-3d;
   width: 100%;
   margin-top: 50px;
- 
   height: 60%;
+  position: relative;
 }
 
 .gallery-item {
@@ -47,7 +48,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  backface-visibility: hidden;
+  backface-visibility: visible;
   transform-style: preserve-3d;
   transition: transform 0.3s ease;
 }
@@ -95,14 +96,7 @@
   z-index: 2;
 }
 
-.image-container::before {
-  top: 0;
-}
-
-.image-container::after {
-  bottom: 0;
-}
-
+ 
 /* Description container */
 .description-container {
   position: relative;
