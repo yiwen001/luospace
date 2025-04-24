@@ -5,7 +5,7 @@ import Above from "@/components/above";
 import About from "@/components/about";
 import HorizontalScroll from "@/components/portfolio";
 import Waves from "@/components/wavebg/Wave";
- 
+import Circle3D from "@/components/Circle3D";
 export default function ClientPage({ portfolio, about }) {
   const [showWaves, setShowWaves] = useState(false);
   const aboutSectionRef = useRef(null);
@@ -70,6 +70,12 @@ export default function ClientPage({ portfolio, about }) {
 
       <div className="relative w-screen h-screen flex-none snap-start">
         <HorizontalScroll portfolio={portfolio} />
+      </div>
+
+      <div className="relative w-screen h-screen flex-none snap-start">
+     
+        <Circle3D />
+         
       </div>
 
       <div className="relative w-screen h-screen flex-none snap-start" ref={aboutSectionRef}>
