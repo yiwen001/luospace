@@ -121,7 +121,7 @@ function OrbitingObjects({ radiusX, radiusY, count }) {
       if (ref) {
         // Calculate position offset for each object
         const offset = (index / count) * Math.PI * 2;
-        const t = (time * 0.2 + offset) % 1;
+        const t = (time * 0.05 + offset) % 1;
         
         // Get position on the curve
         const point = curve.getPoint(t);
@@ -149,7 +149,7 @@ function OrbitingObjects({ radiusX, radiusY, count }) {
             position={[0, 0, 0]}
           >
             <Suspense fallback={null}>
-              <Model url={modelPath} scale={0.5} />
+              <Model url={modelPath} scale={1} />
             </Suspense>
           </group>
         );
