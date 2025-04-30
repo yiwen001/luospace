@@ -60,37 +60,21 @@ export default function Sphere() {
     }
   }, []);
 
-  // 添加滚动监听
+  //添加滚动监听
   // useEffect(() => {
   //   const handleScroll = () => {
   //     if (meshRef.current) {
-  //       const viewportHeight = window.innerHeight;
-  //       const currentScroll = window.scrollY;
+  //       const viewportWidth = window.innerWidth;
+  //       const currentScroll = window.scrollX;  // 改用 scrollX 监听横向滚动
 
   //       // 计算当前在第几屏
-  //       const currentScreen = Math.floor(currentScroll / viewportHeight);
+  //       const currentScreen = Math.floor(currentScroll / viewportWidth);
 
-  //       if (currentScroll > viewportHeight) {
+  //       if (currentScroll > viewportWidth) {
   //         let targetScale = 1.0;
 
-  //         if (currentScreen < 4) {
-  //           // 在第2-3屏逐渐缩小到0.2
-  //           const scrollPercent =
-  //             ((currentScroll - viewportHeight) / (2 * viewportHeight)) * 5;
-  //           targetScale = gsap.utils.interpolate(
-  //             1.0,
-  //             0.2,
-  //             Math.min(1, scrollPercent)
-  //           );
-  //         } else {
-  //           // 在第4屏开始逐渐变大到1.5
-  //           const scrollPercent =
-  //             (currentScroll - 4 * viewportHeight) / viewportHeight;
-  //           targetScale = gsap.utils.interpolate(
-  //             0.2,
-  //             1.5,
-  //             Math.min(1, scrollPercent)
-  //           );
+  //         if (currentScreen === 1) {  // 在第二屏时缩小到0.3
+  //           targetScale = 0.5;
   //         }
 
   //         transitionRef.current.scrollScale = targetScale;
