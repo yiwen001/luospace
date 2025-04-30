@@ -91,12 +91,9 @@ const CurvedImage = ({ imageUrl, index, totalItems, radius, width, height }) => 
   
   return (
     <mesh ref={meshRef} geometry={geometry}>
-      <meshStandardMaterial 
+      <meshBasicMaterial 
         map={texture} 
         side={DoubleSide}
-        transparent={true}
-        roughness={0.4}
-        metalness={0.1}
       />
     </mesh>
   );
