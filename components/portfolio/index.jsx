@@ -13,54 +13,18 @@ import * as THREE from 'three';
 import { OrbitControls, Environment } from "@react-three/drei";
 import Sphere from "../sphere/ShaderSphere";
 
-// 生成一个颜色纹理作为备用
-const createColorTexture = (index, total) => {
-  const canvas = document.createElement('canvas');
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext('2d');
-  
-  // 使用索引创建彩虹色彩
-  const hue = (index / total) * 360;
-  ctx.fillStyle = `hsl(${hue}, 70%, 40%)`;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // 添加一些视觉效果
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-  ctx.lineWidth = 8;
-  ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
-  
-  // 将 canvas 转换为纹理
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.minFilter = LinearFilter;
-  texture.magFilter = LinearFilter;
-  return texture;
-};
+// 不需要创建备用纹理，直接使用图片
 
 // 圆环上的曲面图片组件
 const CurvedImage = ({ imageUrl, index, totalItems, radius, width, height }) => {
   const meshRef = useRef();
   
-  // 创建颜色纹理作为备用
-  const colorTexture = useMemo(() => createColorTexture(index, totalItems), [index, totalItems]);
+  // 直接使用useLoader加载图片纹理
+  const texture = useLoader(TextureLoader, imageUrl);
   
-  // 使用useLoader加载纹理，并处理错误情况
-  let texture;
-  try {
-    texture = useLoader(TextureLoader, imageUrl || '/placeholder.jpg');
-    // 设置纹理属性以确保高质量显示
-    texture.minFilter = LinearFilter;
-    texture.magFilter = LinearFilter;
-    texture.needsUpdate = true;
-    console.log('Texture loaded successfully:', imageUrl);
-  } catch (error) {
-    console.error('Failed to load texture:', imageUrl, error);
-    // 加载失败时使用颜色纹理
-    texture = null;
-  }
-  
-  // 如果没有URL或加载失败，使用颜色纹理
-  const finalTexture = (imageUrl && texture) ? texture : colorTexture;
+  // 设置纹理属性
+  texture.minFilter = LinearFilter;
+  texture.magFilter = LinearFilter;
   
   // 计算此图片在圆环上的位置
   const angle = (index / totalItems) * Math.PI * 2;
@@ -128,7 +92,7 @@ const CurvedImage = ({ imageUrl, index, totalItems, radius, width, height }) => 
   return (
     <mesh ref={meshRef} geometry={geometry}>
       <meshStandardMaterial 
-        map={finalTexture} 
+        map={texture} 
         side={DoubleSide}
         transparent={true}
         roughness={0.4}
