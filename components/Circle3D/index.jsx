@@ -1,7 +1,7 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import React, { useRef, useEffect, useState, Suspense } from "react";
+import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import Sphere from "../sphere/ShaderSphere";
 
@@ -72,9 +72,37 @@ function EllipticalLine({ radiusX, radiusY, segments, lineWidth, color }) {
   );
 }
 
+// GLB Model component with loading capability
+function Model({ url, scale = 1 }) {
+  const { scene } = useGLTF(url);
+  
+  useEffect(() => {
+    // Apply materials or modifications to the model if needed
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  }, [scene]);
+
+  return (
+    <primitive 
+      object={scene} 
+      scale={[scale, scale, scale]} 
+      dispose={null}
+    />
+  );
+}
+
 // Component for objects that orbit along the elliptical path
 function OrbitingObjects({ radiusX, radiusY, count }) {
   const objectRefs = useRef([]);
+  const modelPaths = [
+    '/glb/1.glb',
+    '/glb/3.glb',
+    '/glb/4.glb'
+  ];
   
   // Create a curve to calculate positions
   const curve = new THREE.EllipseCurve(
@@ -93,7 +121,7 @@ function OrbitingObjects({ radiusX, radiusY, count }) {
       if (ref) {
         // Calculate position offset for each object
         const offset = (index / count) * Math.PI * 2;
-        const t = (time * 0.2 + offset) % 1;
+        const t = (time * 0.05 + offset) % 1;
         
         // Get position on the curve
         const point = curve.getPoint(t);
@@ -101,29 +129,35 @@ function OrbitingObjects({ radiusX, radiusY, count }) {
         // Update object position
         ref.position.x = point.x;
         ref.position.y = point.y;
+        
+        // Add rotation to the models as they orbit
+        ref.rotation.y += 0.01;
       }
     });
   });
   
   return (
     <>
-      {Array.from({ length: count }).map((_, index) => (
-        <mesh 
-          key={index}
-          ref={(el) => (objectRefs.current[index] = el)}
-          position={[0, 0, 0]}
-        >
-          <sphereGeometry args={[0.15, 16, 16]} />
-          <meshStandardMaterial color="#ffffff" emissive="#333333" />
-        </mesh>
-      ))}
+      {Array.from({ length: count }).map((_, index) => {
+        // Use the available models, cycling through if there are more objects than models
+        const modelPath = modelPaths[index % modelPaths.length];
+        
+        return (
+          <group 
+            key={index}
+            ref={(el) => (objectRefs.current[index] = el)}
+            position={[0, 0, 0]}
+          >
+            <Suspense fallback={null}>
+              <Model url={modelPath} scale={1} />
+            </Suspense>
+          </group>
+        );
+      })}
     </>
   );
 }
 
-// // Camera control component for smooth movement
-// function CameraRig() {
-//   const { camera } = useThree();
 //   const mousePosition = useRef({ x: 0, y: 0 });
 
 //   useEffect(() => {

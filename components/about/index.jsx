@@ -59,7 +59,7 @@ const About = ({ item }) => {
       {/* image */}
       <div className="col-span-full md:col-span-3 h-fit">
         <figure
-          className="relative w-40 mx-auto md:w-full"
+          className="relative w-40 mx-auto md:w-full border border-black"
           style={{ aspectRatio: ratio }}
         >
           <Image src={imgUrl} alt={title} fill className="object-cover" />
