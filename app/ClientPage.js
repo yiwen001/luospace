@@ -34,7 +34,9 @@ export default function ClientPage({ portfolio, about }) {
   const mainRef = useRef(null);
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSection2, setIsLoadingSection2] = useState(true);
+  const [isLoadingSection3, setIsLoadingSection3] = useState(true);
 
   const scrollToSection = (index) => {
     if (isScrolling) return; // Prevent multiple scroll events
@@ -97,14 +99,22 @@ export default function ClientPage({ portfolio, about }) {
     };
   }, []);
   
-  // 控制整体页面加载状态
+  // 控制第2和第3页的资源加载状态
   useEffect(() => {
-    // 模拟资源预加载
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // 给予足够时间预加载资源
+    // 模拟第2页资源预加载
+    const timer1 = setTimeout(() => {
+      setIsLoadingSection2(false);
+    }, 2000);
     
-    return () => clearTimeout(timer);
+    // 模拟第3页资源预加载
+    const timer2 = setTimeout(() => {
+      setIsLoadingSection3(false);
+    }, 3000);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, []);
 
   // 主加载屏幕
@@ -124,7 +134,7 @@ export default function ClientPage({ portfolio, about }) {
     <>
       {isLoading && <MainLoadingScreen />}
       
-      <main ref={mainRef} className={`flex snap-x snap-mandatory overflow-x-hidden ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-1000'}`}>
+      <main ref={mainRef} className="flex snap-x snap-mandatory overflow-x-hidden opacity-100">
         <div className="relative w-screen h-screen flex-none snap-start">
           <div className="fixed inset-0 z-0">
             <Above />  
@@ -135,11 +145,33 @@ export default function ClientPage({ portfolio, about }) {
         </div>
 
         <div className="relative w-screen h-screen flex-none snap-start">
-          <HorizontalScroll portfolio={portfolio} />
+          {isLoadingSection2 ? (
+            <div className="flex items-center justify-center w-full h-full bg-black">
+              <div className="text-center">
+                <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-white border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                </div>
+                <p className="mt-4 text-white">加载作品集中...</p>
+              </div>
+            </div>
+          ) : (
+            <HorizontalScroll portfolio={portfolio} />
+          )}
         </div>
 
         <div className="relative w-screen h-screen flex-none snap-start">
-          <Circle3D />
+          {isLoadingSection3 ? (
+            <div className="flex items-center justify-center w-full h-full bg-black">
+              <div className="text-center">
+                <div className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-white border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                </div>
+                <p className="mt-4 text-white">加载3D模型中...</p>
+              </div>
+            </div>
+          ) : (
+            <Circle3D />
+          )}
         </div>
 
         <div className="relative w-screen h-screen flex-none snap-start" ref={aboutSectionRef}>
