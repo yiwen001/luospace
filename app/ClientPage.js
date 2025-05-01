@@ -11,19 +11,34 @@ export default function ClientPage({ portfolio, about }) {
   const aboutSectionRef = useRef(null);
   const mainRef = useRef(null);
   const [currentSection, setCurrentSection] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const scrollToSection = (index) => {
+    if (isScrolling) return; // Prevent multiple scroll events
+    
+    setIsScrolling(true);
     const sections = mainRef.current?.children;
     if (sections && sections[index]) {
       sections[index].scrollIntoView({ behavior: 'smooth', inline: 'start' });
       setCurrentSection(index);
+      
+      // Reset scrolling lock after animation completes
+      setTimeout(() => {
+        setIsScrolling(false);
+      }, 800); // Adjust timing to match scroll animation duration
+    } else {
+      setIsScrolling(false);
     }
   };
 
   useEffect(() => {
     const handleWheel = (e) => {
       e.preventDefault();
-      if (e.deltaY > 0 && currentSection < 2) {
+      
+      if (isScrolling) return; // Prevent scroll during animation
+      
+      // Only move one section at a time
+      if (e.deltaY > 0 && currentSection < 3) {
         scrollToSection(currentSection + 1);
       } else if (e.deltaY < 0 && currentSection > 0) {
         scrollToSection(currentSection - 1);
@@ -32,7 +47,7 @@ export default function ClientPage({ portfolio, about }) {
 
     window.addEventListener('wheel', handleWheel, { passive: false });
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [currentSection]);
+  }, [currentSection, isScrolling]);
 
   useEffect(() => {
     if (!aboutSectionRef.current) return;
@@ -59,13 +74,15 @@ export default function ClientPage({ portfolio, about }) {
   }, []);
 
   return (
-    <main ref={mainRef} className="flex snap-x snap-mandatory">
+    <main ref={mainRef} className="flex snap-x snap-mandatory overflow-x-hidden">
       
       <div className="relative w-screen h-screen flex-none snap-start">
-        <div className="fixed inset-0">
-        <Above />  
+        <div className="fixed inset-0 z-0">
+          <Above />  
         </div>
-       <Experience />
+        <div className="relative z-10">
+          <Experience />
+        </div>
       </div>
 
       <div className="relative w-screen h-screen flex-none snap-start">
@@ -73,13 +90,10 @@ export default function ClientPage({ portfolio, about }) {
       </div>
 
       <div className="relative w-screen h-screen flex-none snap-start">
-     
         <Circle3D />
-         
       </div>
 
       <div className="relative w-screen h-screen flex-none snap-start" ref={aboutSectionRef}>
-      
         <div className="relative z-[10]">
           <ul>
             {about.map((item, index) => {
@@ -99,9 +113,6 @@ export default function ClientPage({ portfolio, about }) {
                   yGap={36} style={{ pointerEvents: 'auto', zIndex: 5 }} />}
         </div>
       </div>
-      
-    
-
     </main>
   );
 }
